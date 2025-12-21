@@ -2,12 +2,17 @@
 
 
 #include "Sam_Character.h"
+#include "GameframeWork/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "EnhancedInputComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 
 
 
@@ -17,6 +22,18 @@ ASam_Character::ASam_Character()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(GetCapsuleComponent());
+
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm);
+
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight()));
+
+	GetMesh()->SetRelativeRotation(FRotator(0, -90.0f, 0));
+
+	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSource"));
 
 	SetGenericTeamId(1);
 
@@ -41,9 +58,12 @@ void ASam_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	UE_LOG(LogTemp, Warning, TEXT("SetupPlayerInputComponent"));
+
 	UEnhancedInputComponent* UIC = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	if (UIC)
 	{
+
 		UIC->BindAction(IA_Sprint, ETriggerEvent::Started, this,
 			&ASam_Character::StartSprint);
 		UIC->BindAction(IA_Sprint, ETriggerEvent::Completed, this,
@@ -74,11 +94,13 @@ void ASam_Character::Look(float Pitch, float Yaw)
 
 void ASam_Character::StartSprint()
 {
+	UE_LOG(LogTemp, Warning, TEXT("StartSprint"));
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 }
 
 void ASam_Character::StopSprint()
 {
+	UE_LOG(LogTemp, Warning, TEXT("StopSprint"));
 	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 
 }

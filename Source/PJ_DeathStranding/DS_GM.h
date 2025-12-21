@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -14,4 +14,5 @@ class PJ_DEATHSTRANDING_API ADS_GM : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+	ADS_GM();
 };
