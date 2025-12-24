@@ -95,7 +95,7 @@ void ASam_Character::Look(float Pitch, float Yaw)
 void ASam_Character::StartSprint()
 {
 	UE_LOG(LogTemp, Warning, TEXT("StartSprint"));
-	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	GetCharacterMovement()->MaxWalkSpeed = 450.0f;
 }
 
 void ASam_Character::StopSprint()
