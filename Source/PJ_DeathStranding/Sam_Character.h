@@ -24,6 +24,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class USpringArmComponent> SpringArm;
 
@@ -40,11 +41,15 @@ public:
 	UPROPERTY(Category = Character, EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UAIPerceptionStimuliSourceComponent> StimuliSource;
 
-	UFUNCTION(BlueprintCallable)
-	void Move(float Forward, float Right);
+	UPROPERTY(Category = Input, EditAnywhere, BlueprintReadWrite)
+	uint8 bIsInputLocked : 1;
+
 
 	UFUNCTION(BlueprintCallable)
-	void Look(float Pitch, float Yaw);
+	void Move(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
+	void Look(const FInputActionValue& Value);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Character)
 	uint8 bSprint : 1;

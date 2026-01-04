@@ -43,7 +43,7 @@ ASam_Character::ASam_Character()
 void ASam_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -72,35 +72,36 @@ void ASam_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
-void ASam_Character::Move(float Forward, float Right)
+void ASam_Character::Move(const FInputActionValue& Value)
 {
-	const FRotator CameraRotation = GetController()->GetControlRotation();
-	const FRotator YawRotation = FRotator(0, CameraRotation.Yaw, 0);
-	const FRotator YawRollRotation = FRotator(0, CameraRotation.Yaw, CameraRotation.Roll);
+	FVector2D Input = Value.Get<FVector2D>();
 
+	if (!Controller) return;
 
-	const FVector ForwardVector = UKismetMathLibrary::GetForwardVector(YawRotation);
-	AddMovementInput(ForwardVector, Forward);
+	const FRotator ControlRot = Controller->GetControlRotation();
+	const FRotator YawRot(0.f, ControlRot.Yaw, 0.f);
 
-	const FVector RightVector = UKismetMathLibrary::GetRightVector(YawRollRotation);
-	AddMovementInput(RightVector, Right);
+	const FVector Forward = FRotationMatrix(YawRot).GetUnitAxis(EAxis::X);
+	const FVector Right = FRotationMatrix(YawRot).GetUnitAxis(EAxis::Y);
+
+	AddMovementInput(Forward, Input.Y);
+	AddMovementInput(Right, Input.X);
 }
 
-void ASam_Character::Look(float Pitch, float Yaw)
+void ASam_Character::Look(const FInputActionValue& Value)
 {
-	AddControllerPitchInput(Pitch);
-	AddControllerYawInput(Yaw);
+	FVector2D Input = Value.Get<FVector2D>();
+	AddControllerYawInput(Input.X);
+	AddControllerPitchInput(Input.Y);
 }
 
 void ASam_Character::StartSprint()
 {
-	UE_LOG(LogTemp, Warning, TEXT("StartSprint"));
 	GetCharacterMovement()->MaxWalkSpeed = 450.0f;
 }
 
 void ASam_Character::StopSprint()
 {
-	UE_LOG(LogTemp, Warning, TEXT("StopSprint"));
 	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 
 }
