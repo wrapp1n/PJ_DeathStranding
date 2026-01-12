@@ -13,5 +13,10 @@ UCLASS()
 class PJ_DEATHSTRANDING_API UBTTask_SetRandomPoint : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
+
+public:
+	UBTTask_SetRandomPoint();
+
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
 };

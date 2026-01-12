@@ -4,7 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
+#include "Mule.h"
 #include "BTTask_CheckDistance.generated.h"
+
+UENUM(BlueprintType)
+enum class ECondition : uint8
+{
+	LessThan = 0  UMETA(DisplayName = "<"),
+	GraterThan = 1  UMETA(DisplayName = ">"),
+};
 
 /**
  * 
@@ -13,5 +21,19 @@ UCLASS()
 class PJ_DEATHSTRANDING_API UBTTask_CheckDistance : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
+
+public:
+	UBTTask_CheckDistance();
+
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Condition)
+	ECondition TargetCondition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Condition)
+	EMuleState TargetState;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Condition)
+	float TargetDistance;
 	
 };

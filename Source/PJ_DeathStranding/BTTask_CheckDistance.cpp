@@ -2,4 +2,48 @@
 
 
 #include "BTTask_CheckDistance.h"
+#include "AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
+UBTTask_CheckDistance::UBTTask_CheckDistance()
+{
+	NodeName = TEXT("CheckDistance");
+}
+
+EBTNodeResult::Type UBTTask_CheckDistance::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+{
+	AActor* Player = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TEXT("Target")));
+	AMule* Mule = Cast<AMule>(OwnerComp.GetAIOwner()->GetPawn());
+
+	if (Player && Mule)
+	{
+		FVector MuleLocation = Mule->GetActorLocation();
+		FVector PlayerLocation = Player->GetActorLocation();
+		float Distance = FVector::Distance(MuleLocation, PlayerLocation);
+
+		switch (TargetCondition)
+		{
+			case ECondition::GraterThan:
+			{
+				if (Distance > TargetDistance)
+				{
+					Mule->SetState(TargetState);
+					OwnerComp.GetBlackboardComponent()->SetValueAsEnum(GetSelectedBlackboardKey(), (uint8)TargetState);
+				}
+			}
+			break;
+			case ECondition::LessThan:
+			{
+				if (Distance < TargetDistance)
+				{
+					Mule->SetState(TargetState);
+					OwnerComp.GetBlackboardComponent()->SetValueAsEnum(GetSelectedBlackboardKey(), (uint8)TargetState);
+				}
+			}
+			break;
+		}
+	}
+
+
+	return EBTNodeResult::Type();
+}
