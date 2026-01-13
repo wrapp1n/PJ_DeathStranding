@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "BTTask_SetRandomPoint.h"
@@ -25,7 +25,7 @@ EBTNodeResult::Type UBTTask_SetRandomPoint::ExecuteTask(UBehaviorTreeComponent& 
 			GetWorld(),
 			Location,
 			Destination,
-			500.0f
+			5000.0f
 		))
 		{
 			OwnerComp.GetBlackboardComponent()->SetValueAsVector(

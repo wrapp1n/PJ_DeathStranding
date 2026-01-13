@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "BTTask_CheckDistance.h"
@@ -23,24 +23,24 @@ EBTNodeResult::Type UBTTask_CheckDistance::ExecuteTask(UBehaviorTreeComponent& O
 
 		switch (TargetCondition)
 		{
-			case ECondition::GraterThan:
+		case ECondition::GraterThan:
+		{
+			if (Distance > TargetDistance)
 			{
-				if (Distance > TargetDistance)
-				{
-					Mule->SetState(TargetState);
-					OwnerComp.GetBlackboardComponent()->SetValueAsEnum(GetSelectedBlackboardKey(), (uint8)TargetState);
-				}
+				Mule->SetState(TargetState);
+				OwnerComp.GetBlackboardComponent()->SetValueAsEnum(GetSelectedBlackboardKey(), (uint8)TargetState);
 			}
-			break;
-			case ECondition::LessThan:
+		}
+		break;
+		case ECondition::LessThan:
+		{
+			if (Distance < TargetDistance)
 			{
-				if (Distance < TargetDistance)
-				{
-					Mule->SetState(TargetState);
-					OwnerComp.GetBlackboardComponent()->SetValueAsEnum(GetSelectedBlackboardKey(), (uint8)TargetState);
-				}
+				Mule->SetState(TargetState);
+				OwnerComp.GetBlackboardComponent()->SetValueAsEnum(GetSelectedBlackboardKey(), (uint8)TargetState);
 			}
-			break;
+		}
+		break;
 		}
 	}
 
